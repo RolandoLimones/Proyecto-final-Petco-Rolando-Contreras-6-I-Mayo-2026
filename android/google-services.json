@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1007222142821",
+    "project_id": "petco-6301a",
+    "storage_bucket": "petco-6301a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007222142821:android:5bb261c2db35a46c42138c",
+        "android_client_info": {
+          "package_name": "com.example.petcocrud"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVzOM5pARz6FFVDMejR9rUIecIVIL7U7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
