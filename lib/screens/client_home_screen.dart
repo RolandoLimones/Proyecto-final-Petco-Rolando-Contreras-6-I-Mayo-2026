@@ -181,150 +181,159 @@ class _ClientHomeScreenState extends State<ClientHomeScreen> {
               child: Container(
                 decoration: AppColors.glassDecoration(borderRadius: 20.0),
                 padding: const EdgeInsets.all(24.0),
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.85,
+                ),
                 child: Form(
                   key: formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        'Editar Mascota',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      CustomTextField(
-                        controller: nombreCtrl,
-                        labelText: 'Nombre',
-                        prefixIcon: const Icon(
-                          Icons.pets_rounded,
-                          color: AppColors.textSecondary,
-                        ),
-                        validator: (v) => v == null || v.trim().isEmpty
-                            ? 'Ingrese el nombre'
-                            : null,
-                      ),
-                      const SizedBox(height: 12.0),
-                      CustomTextField(
-                        controller: especieCtrl,
-                        labelText: 'Especie (ej. Perro, Gato)',
-                        prefixIcon: const Icon(
-                          Icons.category_rounded,
-                          color: AppColors.textSecondary,
-                        ),
-                        validator: (v) => v == null || v.trim().isEmpty
-                            ? 'Ingrese la especie'
-                            : null,
-                      ),
-                      const SizedBox(height: 12.0),
-                      CustomTextField(
-                        controller: razaCtrl,
-                        labelText: 'Raza (Opcional)',
-                        prefixIcon: const Icon(
-                          Icons.info_outline_rounded,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: 12.0),
-                      CustomTextField(
-                        controller: edadCtrl,
-                        labelText: 'Edad (años)',
-                        keyboardType: TextInputType.number,
-                        prefixIcon: const Icon(
-                          Icons.cake_rounded,
-                          color: AppColors.textSecondary,
-                        ),
-                        validator: (v) {
-                          if (v == null || v.isEmpty) return 'Ingrese la edad';
-                          if (int.tryParse(v) == null) return 'Número válido';
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 12.0),
-                      CustomTextField(
-                        controller: pesoCtrl,
-                        labelText: 'Peso (kg) - Opcional',
-                        keyboardType: TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        prefixIcon: const Icon(
-                          Icons.monitor_weight_outlined,
-                          color: AppColors.textSecondary,
-                        ),
-                        validator: (v) {
-                          if (v != null &&
-                              v.isNotEmpty &&
-                              double.tryParse(v) == null) {
-                            return 'Número válido';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 24.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () => Navigator.of(ctx).pop(),
-                            child: const Text(
-                              'Cancelar',
-                              style: TextStyle(color: AppColors.textSecondary),
-                            ),
+                  child: SingleChildScrollView(
+                    // 👈 Scroll añadido aquí también
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          'Editar Mascota',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
                           ),
-                          const SizedBox(width: 8),
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (!formKey.currentState!.validate()) return;
-                              final updatedPet = pet.copyWith(
-                                nombre: nombreCtrl.text.trim(),
-                                especie: especieCtrl.text.trim(),
-                                raza: razaCtrl.text.trim(),
-                                edad: int.parse(edadCtrl.text),
-                                peso: pesoCtrl.text.trim().isEmpty
-                                    ? null
-                                    : double.tryParse(pesoCtrl.text),
-                              );
-                              try {
-                                await Provider.of<PetsProvider>(
-                                  context,
-                                  listen: false,
-                                ).updateMascota(updatedPet);
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'Mascota actualizada con éxito',
+                        ),
+                        const SizedBox(height: 20.0),
+                        CustomTextField(
+                          controller: nombreCtrl,
+                          labelText: 'Nombre',
+                          prefixIcon: const Icon(
+                            Icons.pets_rounded,
+                            color: AppColors.textSecondary,
+                          ),
+                          validator: (v) => v == null || v.trim().isEmpty
+                              ? 'Ingrese el nombre'
+                              : null,
+                        ),
+                        const SizedBox(height: 12.0),
+                        CustomTextField(
+                          controller: especieCtrl,
+                          labelText: 'Especie (ej. Perro, Gato)',
+                          prefixIcon: const Icon(
+                            Icons.category_rounded,
+                            color: AppColors.textSecondary,
+                          ),
+                          validator: (v) => v == null || v.trim().isEmpty
+                              ? 'Ingrese la especie'
+                              : null,
+                        ),
+                        const SizedBox(height: 12.0),
+                        CustomTextField(
+                          controller: razaCtrl,
+                          labelText: 'Raza (Opcional)',
+                          prefixIcon: const Icon(
+                            Icons.info_outline_rounded,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 12.0),
+                        CustomTextField(
+                          controller: edadCtrl,
+                          labelText: 'Edad (años)',
+                          keyboardType: TextInputType.number,
+                          prefixIcon: const Icon(
+                            Icons.cake_rounded,
+                            color: AppColors.textSecondary,
+                          ),
+                          validator: (v) {
+                            if (v == null || v.isEmpty)
+                              return 'Ingrese la edad';
+                            if (int.tryParse(v) == null) return 'Número válido';
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 12.0),
+                        CustomTextField(
+                          controller: pesoCtrl,
+                          labelText: 'Peso (kg) - Opcional',
+                          keyboardType: TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.monitor_weight_outlined,
+                            color: AppColors.textSecondary,
+                          ),
+                          validator: (v) {
+                            if (v != null &&
+                                v.isNotEmpty &&
+                                double.tryParse(v) == null) {
+                              return 'Número válido';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 24.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.of(ctx).pop(),
+                              child: const Text(
+                                'Cancelar',
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (!formKey.currentState!.validate()) return;
+                                final updatedPet = pet.copyWith(
+                                  nombre: nombreCtrl.text.trim(),
+                                  especie: especieCtrl.text.trim(),
+                                  raza: razaCtrl.text.trim(),
+                                  edad: int.parse(edadCtrl.text),
+                                  peso: pesoCtrl.text.trim().isEmpty
+                                      ? null
+                                      : double.tryParse(pesoCtrl.text),
+                                );
+                                try {
+                                  await Provider.of<PetsProvider>(
+                                    context,
+                                    listen: false,
+                                  ).updateMascota(updatedPet);
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Mascota actualizada con éxito',
+                                        ),
+                                        backgroundColor: Colors.green,
                                       ),
-                                      backgroundColor: Colors.green,
-                                    ),
-                                  );
-                                  Navigator.of(ctx).pop();
+                                    );
+                                    Navigator.of(ctx).pop();
+                                  }
+                                } catch (e) {
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Error: $e'),
+                                        backgroundColor: AppColors.darkRed,
+                                      ),
+                                    );
+                                  }
                                 }
-                              } catch (e) {
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Error: $e'),
-                                      backgroundColor: AppColors.darkRed,
-                                    ),
-                                  );
-                                }
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.darkBlue,
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.darkBlue,
+                              ),
+                              child: const Text(
+                                'Guardar',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                            child: const Text(
-                              'Guardar',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -684,169 +693,182 @@ class _ClientHomeScreenState extends State<ClientHomeScreen> {
               child: Container(
                 decoration: AppColors.glassDecoration(borderRadius: 20.0),
                 padding: const EdgeInsets.all(24.0),
+                // Definimos una restricción de altura máxima basada en la pantalla
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.85,
+                ),
                 child: Form(
                   key: _petFormKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        'Registrar Mascota',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      CustomTextField(
-                        controller: _petNameController,
-                        labelText: 'Nombre',
-                        prefixIcon: const Icon(
-                          Icons.pets_rounded,
-                          color: AppColors.textSecondary,
-                        ),
-                        validator: (v) => v == null || v.trim().isEmpty
-                            ? 'Ingrese el nombre'
-                            : null,
-                      ),
-                      const SizedBox(height: 12.0),
-                      CustomTextField(
-                        controller: _petSpeciesController,
-                        labelText: 'Especie (ej. Perro, Gato)',
-                        prefixIcon: const Icon(
-                          Icons.category_rounded,
-                          color: AppColors.textSecondary,
-                        ),
-                        validator: (v) => v == null || v.trim().isEmpty
-                            ? 'Ingrese la especie'
-                            : null,
-                      ),
-                      const SizedBox(height: 12.0),
-                      CustomTextField(
-                        controller: _petBreedController,
-                        labelText: 'Raza (Opcional)',
-                        prefixIcon: const Icon(
-                          Icons.info_outline_rounded,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: 12.0),
-                      CustomTextField(
-                        controller: _petAgeController,
-                        labelText: 'Edad (años)',
-                        keyboardType: TextInputType.number,
-                        prefixIcon: const Icon(
-                          Icons.cake_rounded,
-                          color: AppColors.textSecondary,
-                        ),
-                        validator: (v) {
-                          if (v == null || v.isEmpty) return 'Ingrese la edad';
-                          if (int.tryParse(v) == null)
-                            return 'Ingrese un número válido';
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 12.0),
-                      CustomTextField(
-                        controller: _petPesoController,
-                        labelText: 'Peso (kg) - Opcional',
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        prefixIcon: const Icon(
-                          Icons.monitor_weight_outlined,
-                          color: AppColors.textSecondary,
-                        ),
-                        validator: (v) {
-                          if (v != null &&
-                              v.isNotEmpty &&
-                              double.tryParse(v) == null) {
-                            return 'Ingrese un número válido';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 24.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              _petNameController.clear();
-                              _petSpeciesController.clear();
-                              _petBreedController.clear();
-                              _petAgeController.clear();
-                              _petPesoController.clear();
-                              Navigator.of(ctx).pop();
-                            },
-                            child: const Text(
-                              'Cancelar',
-                              style: TextStyle(color: AppColors.textSecondary),
-                            ),
+                  child: SingleChildScrollView(
+                    // 👈 Evita el overflow al abrir el teclado
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          'Registrar Mascota',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
                           ),
-                          const SizedBox(width: 8),
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (!_petFormKey.currentState!.validate()) return;
-                              final auth = Provider.of<AuthProvider>(
-                                context,
-                                listen: false,
-                              );
-                              final pet = Mascota(
-                                id: '',
-                                nombre: _petNameController.text.trim(),
-                                especie: _petSpeciesController.text.trim(),
-                                raza: _petBreedController.text.trim(),
-                                edad: int.parse(_petAgeController.text),
-                                peso: _petPesoController.text.trim().isEmpty
-                                    ? null
-                                    : double.tryParse(_petPesoController.text),
-                                clienteId: auth.user!.uid,
-                              );
-                              try {
-                                await Provider.of<PetsProvider>(
+                        ),
+                        const SizedBox(height: 20.0),
+                        CustomTextField(
+                          controller: _petNameController,
+                          labelText: 'Nombre',
+                          prefixIcon: const Icon(
+                            Icons.pets_rounded,
+                            color: AppColors.textSecondary,
+                          ),
+                          validator: (v) => v == null || v.trim().isEmpty
+                              ? 'Ingrese el nombre'
+                              : null,
+                        ),
+                        const SizedBox(height: 12.0),
+                        CustomTextField(
+                          controller: _petSpeciesController,
+                          labelText: 'Especie (ej. Perro, Gato)',
+                          prefixIcon: const Icon(
+                            Icons.category_rounded,
+                            color: AppColors.textSecondary,
+                          ),
+                          validator: (v) => v == null || v.trim().isEmpty
+                              ? 'Ingrese la especie'
+                              : null,
+                        ),
+                        const SizedBox(height: 12.0),
+                        CustomTextField(
+                          controller: _petBreedController,
+                          labelText: 'Raza (Opcional)',
+                          prefixIcon: const Icon(
+                            Icons.info_outline_rounded,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 12.0),
+                        CustomTextField(
+                          controller: _petAgeController,
+                          labelText: 'Edad (años)',
+                          keyboardType: TextInputType.number,
+                          prefixIcon: const Icon(
+                            Icons.cake_rounded,
+                            color: AppColors.textSecondary,
+                          ),
+                          validator: (v) {
+                            if (v == null || v.isEmpty)
+                              return 'Ingrese la edad';
+                            if (int.tryParse(v) == null)
+                              return 'Ingrese un número válido';
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 12.0),
+                        CustomTextField(
+                          controller: _petPesoController,
+                          labelText: 'Peso (kg) - Opcional',
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.monitor_weight_outlined,
+                            color: AppColors.textSecondary,
+                          ),
+                          validator: (v) {
+                            if (v != null &&
+                                v.isNotEmpty &&
+                                double.tryParse(v) == null) {
+                              return 'Ingrese un número válido';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 24.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                _petNameController.clear();
+                                _petSpeciesController.clear();
+                                _petBreedController.clear();
+                                _petAgeController.clear();
+                                _petPesoController.clear();
+                                Navigator.of(ctx).pop();
+                              },
+                              child: const Text(
+                                'Cancelar',
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (!_petFormKey.currentState!.validate())
+                                  return;
+                                final auth = Provider.of<AuthProvider>(
                                   context,
                                   listen: false,
-                                ).addMascota(pet);
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'Mascota registrada con éxito',
+                                );
+                                final pet = Mascota(
+                                  id: '',
+                                  nombre: _petNameController.text.trim(),
+                                  especie: _petSpeciesController.text.trim(),
+                                  raza: _petBreedController.text.trim(),
+                                  edad: int.parse(_petAgeController.text),
+                                  peso: _petPesoController.text.trim().isEmpty
+                                      ? null
+                                      : double.tryParse(
+                                          _petPesoController.text,
+                                        ),
+                                  clienteId: auth.user!.uid,
+                                );
+                                try {
+                                  await Provider.of<PetsProvider>(
+                                    context,
+                                    listen: false,
+                                  ).addMascota(pet);
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Mascota registrada con éxito',
+                                        ),
+                                        backgroundColor: Colors.green,
                                       ),
-                                      backgroundColor: Colors.green,
-                                    ),
-                                  );
-                                  _petNameController.clear();
-                                  _petSpeciesController.clear();
-                                  _petBreedController.clear();
-                                  _petAgeController.clear();
-                                  _petPesoController.clear();
-                                  Navigator.of(ctx).pop();
+                                    );
+                                    _petNameController.clear();
+                                    _petSpeciesController.clear();
+                                    _petBreedController.clear();
+                                    _petAgeController.clear();
+                                    _petPesoController.clear();
+                                    Navigator.of(ctx).pop();
+                                  }
+                                } catch (e) {
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Error: $e'),
+                                        backgroundColor: AppColors.darkRed,
+                                      ),
+                                    );
+                                  }
                                 }
-                              } catch (e) {
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Error: $e'),
-                                      backgroundColor: AppColors.darkRed,
-                                    ),
-                                  );
-                                }
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.darkBlue,
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.darkBlue,
+                              ),
+                              child: const Text(
+                                'Guardar',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                            child: const Text(
-                              'Guardar',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -930,7 +952,6 @@ class _ClientHomeScreenState extends State<ClientHomeScreen> {
                                   child: CustomTextField(
                                     controller: _expiryController,
                                     labelText: 'Fecha vencimiento (MM/YY)',
-                                    keyboardType: TextInputType.datetime,
                                     prefixIcon: const Icon(
                                       Icons.calendar_today_rounded,
                                       color: AppColors.textSecondary,
